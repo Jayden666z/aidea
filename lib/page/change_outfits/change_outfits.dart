@@ -11,6 +11,7 @@ import 'package:askaide/page/component/theme/custom_size.dart';
 import 'package:askaide/page/component/theme/custom_theme.dart';
 import 'package:askaide/repo/api/creative.dart';
 import 'package:askaide/repo/settings_repo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:get/get.dart';
@@ -96,59 +97,59 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-        ColumnBlock(
-        innerPanding: 10,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        children: [
-          // 上传图片
-          ImageSelectorCrop(
-            clothList: logic.modelList,
-            onImageSelected: ({path, data}) {
-              logic.clearModelSelect();
-              if (path != null) {
-                setState(() {
-                  selectedImagePath = path;
-                  selectedImageData = null;
-                });
-              }
+          ColumnBlock(
+            innerPanding: 10,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            children: [
+              // 上传图片
+              ImageSelectorCrop(
+                clothList: logic.modelList,
+                onImageSelected: ({path, data}) {
+                  logic.clearModelSelect();
+                  if (path != null) {
+                    setState(() {
+                      selectedImagePath = path;
+                      selectedImageData = null;
+                    });
+                  }
 
-              if (data != null) {
-                setState(() {
-                  selectedImageData = data;
-                  selectedImagePath = null;
-                });
-              }
-            },
-            selectedImagePath: selectedImagePath,
-            selectedImageData: selectedImageData,
-            title: "上传参考图",
-            height: 170,
-            titleHelper: InkWell(
-              onTap: () {
-                showBeautyDialog(
-                  context,
-                  type: QuickAlertType.info,
-                  text: "上传照片",
-                  confirmBtnText: AppLocale.gotIt.getString(context),
-                  showCancelBtn: false,
-                );
-              },
-              child: Icon(
-                Icons.help_outline,
-                size: 16,
-                color: customColors.weakLinkColor?.withAlpha(150),
-              ),
-            ),
-            selectedIndex: ({index}) {
-              setState(() {
-                selectedImagePath = null;
-                selectedImageData = null;
-              });
-              logic.selectModels(index!);
-            },
-          )
-        ],
-      ),
+                  if (data != null) {
+                    setState(() {
+                      selectedImageData = data;
+                      selectedImagePath = null;
+                    });
+                  }
+                },
+                selectedImagePath: selectedImagePath,
+                selectedImageData: selectedImageData,
+                title: "上传参考图",
+                height: 170,
+                titleHelper: InkWell(
+                  onTap: () {
+                    showBeautyDialog(
+                      context,
+                      type: QuickAlertType.info,
+                      text: "上传照片",
+                      confirmBtnText: AppLocale.gotIt.getString(context),
+                      showCancelBtn: false,
+                    );
+                  },
+                  child: Icon(
+                    Icons.help_outline,
+                    size: 16,
+                    color: customColors.weakLinkColor?.withAlpha(150),
+                  ),
+                ),
+                selectedIndex: ({index}) {
+                  setState(() {
+                    selectedImagePath = null;
+                    selectedImageData = null;
+                  });
+                  logic.selectModels(index!);
+                },
+              )
+            ],
+          ),
           ColumnBlock(
             innerPanding: 10,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -203,10 +204,25 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
             ],
           ),
 
+          Container(child:
+          CachedNetworkImage(
+            width: 110,
+            // 设置图片宽度
+            height: 100,
+            // 设置图片高度
+            imageUrl: logic.workedUrl,
+            placeholder: (context, url) =>
+            const CircularProgressIndicator(),
+            errorWidget: (context, url, error) =>
+            const Icon(Icons.error),
+            fit: BoxFit.cover,
+          )
+            ,),
 
-          Padding(padding: const EdgeInsets.all(5),child: EnhancedButton(
+
+          Padding(padding: const EdgeInsets.all(5), child: EnhancedButton(
             title: AppLocale.generate.getString(context),
-            onPressed: (){
+            onPressed: () {
               logic.work();
             },
           ),)
@@ -220,7 +236,10 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
   }
 
   int _calCrossAxisCount(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     if (width > CustomSize.maxWindowSize) {
       width = CustomSize.maxWindowSize;
     }
@@ -228,7 +247,10 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
   }
 
   double _calImageSelectorHeight(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
     if (width > CustomSize.smallWindowSize) {
       width = CustomSize.smallWindowSize;
     }
