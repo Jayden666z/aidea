@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_more_list/loading_more_list.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 
@@ -96,7 +97,6 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           ColumnBlock(
             innerPanding: 10,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -204,28 +204,37 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
             ],
           ),
 
-          Container(child:
-          CachedNetworkImage(
-            width: 110,
-            // 设置图片宽度
-            height: 100,
-            // 设置图片高度
-            imageUrl: logic.workedUrl,
-            placeholder: (context, url) =>
-            const CircularProgressIndicator(),
-            errorWidget: (context, url, error) =>
-            const Icon(Icons.error),
-            fit: BoxFit.cover,
+          SizedBox(
+            height: 200,
+            width: 200,
+            child: PhotoView(
+              imageProvider: NetworkImage("https://cdn.gptgo.top/pic/model/01861_00.jpg"),
+            )
+
+            // CachedNetworkImage(
+            //   width: 110,
+            //   // 设置图片宽度
+            //   height: 100,
+            //   // 设置图片高度
+            //   imageUrl: logic.workedUrl,
+            //   placeholder: (context, url) =>
+            //   const CircularProgressIndicator(),
+            //   errorWidget: (context, url, error) =>
+            //   const Icon(Icons.error),
+            //   fit: BoxFit.cover,
+            // )
+            ,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: EnhancedButton(
+              title: AppLocale.generate.getString(context),
+              onPressed: () {
+                logic.work();
+              },
+            ),
           )
-            ,),
-
-
-          Padding(padding: const EdgeInsets.all(5), child: EnhancedButton(
-            title: AppLocale.generate.getString(context),
-            onPressed: () {
-              logic.work();
-            },
-          ),)
           // Container(
           //   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           //   child: Text('热门作品'),
@@ -236,10 +245,7 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
   }
 
   int _calCrossAxisCount(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double width = MediaQuery.of(context).size.width;
     if (width > CustomSize.maxWindowSize) {
       width = CustomSize.maxWindowSize;
     }
@@ -247,10 +253,7 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
   }
 
   double _calImageSelectorHeight(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
     if (width > CustomSize.smallWindowSize) {
       width = CustomSize.smallWindowSize;
     }
