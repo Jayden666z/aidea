@@ -28,6 +28,9 @@ import 'package:sign_in_button/sign_in_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:askaide/helper/http.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../helper/local_storage.dart';
 
 class SignInScreen extends StatefulWidget {
   final SettingRepository settings;
@@ -56,6 +59,10 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     super.initState();
+    if(LocalStorage.get("uuid") == null){
+      LocalStorage.save("uuid",  const Uuid().v4());
+    }
+    Logger.instance.i("uuid: ${LocalStorage.get("uuid")}");
     if (widget.username != null) {
       _usernameController.text = widget.username!;
     }

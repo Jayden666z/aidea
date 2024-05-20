@@ -207,8 +207,17 @@ class _ChangeOutfitsState extends State<ChangeOutfits> {
           SizedBox(
             height: 200,
             width: 200,
-            child: PhotoView(
-              imageProvider: NetworkImage("https://cdn.gptgo.top/pic/model/01861_00.jpg"),
+            child:   CachedNetworkImage(
+              width: 110,
+              // 设置图片宽度
+              height: 100,
+              // 设置图片高度
+              imageUrl:"https://cdn.gptgo.top/pic/model/01861_00.jpg",
+              placeholder: (context, url) =>
+              const CircularProgressIndicator(),
+              errorWidget: (context, url, error) =>
+              const Icon(Icons.error),
+              fit: BoxFit.cover,
             )
 
             // CachedNetworkImage(

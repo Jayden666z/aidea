@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:askaide/helper/local_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
@@ -90,19 +91,28 @@ class Change_outfitLogic extends GetxController {
         clothUrl = element.url;
       }
     });
-    var options = BaseOptions(
-      baseUrl: 'https://www.xx.com/api',
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    );
     response = await dio.post("/work",
         data: {"models": modelUrl, "cloth": clothUrl},
         options: Options(
           headers: {"Content-Type": "application/json"},
         ));
     workedUrl = json.decode(response.toString())["url"];
+    // example create body
+    final body = <String, dynamic>{
+      "url": workedUrl,
+      "uuid": LocalStorage.get("uuid"),
+    };
+    final record = await PB.instance.collection('outfit_history').create(body: body);
     update();
     print(response);
+    print(record);
+
+    final resultList =  await PB.instance.collection('outfit_history').getFirstListItem(
+      'uuid="${LocalStorage.get("uuid")}"',
+    );
+
+    print('11');
+    print(resultList);
     // HttpClient().get(,que);
   }
 }

@@ -3,6 +3,7 @@ import 'package:askaide/bloc/admin_room_bloc.dart';
 import 'package:askaide/bloc/channel_bloc.dart';
 import 'package:askaide/bloc/model_bloc.dart';
 import 'package:askaide/bloc/user_bloc.dart';
+import 'package:askaide/helper/local_storage.dart';
 import 'package:askaide/helper/path.dart';
 import 'package:askaide/page/admin/channels.dart';
 import 'package:askaide/page/admin/channels_add.dart';
@@ -123,7 +124,9 @@ import 'package:askaide/repo/data/settings_data.dart';
 import 'package:askaide/repo/settings_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:uuid/uuid.dart';
 import 'page/component/theme/theme.dart';
 import 'package:sizer/sizer.dart';
 import 'package:askaide/helper/http.dart' as httpx;
@@ -135,7 +138,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   httpx.HttpClient.init();
-
+  await LocalStorage.initSP();
   // 初始化路径，获取到系统相关的文档、缓存目录
   await PathHelper().init();
 
